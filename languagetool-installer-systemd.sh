@@ -3,7 +3,7 @@ set -e
 function _usage()
 {
     echo "This script must be run as root!"
-    echo "Usage: $SCRIPT_NAME [--port=<port>] [--allow-origin=<origin>] [--help|-h]"
+    echo "Usage: $SCRIPT_NAME [--port=<port>] [--allow-origin=<origin>] [--public] [--verbose] [--help|-h]"
     echo "  --port=<port> : Change default port (default: 8081)"
     echo "  --allow-origin: Change default allow-origin (default *)"
     echo "                  To disable this option use --allow-origin="

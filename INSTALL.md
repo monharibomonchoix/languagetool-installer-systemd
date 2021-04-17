@@ -82,7 +82,7 @@ There are 2 options you can change when installing the script:
 
 ```text
 This script must be run as root!
-Usage:  [--port=<port>] [--allow-origin=<origin>] [--help|-h]
+Usage:  [--port=<port>] [--allow-origin=<origin>] [--public] [--verbose] [--help|-h]
   --port=<port> : Change default port (default: 8081)
   --allow-origin: Change default allow-origin (default *)
                   To disable this option use --allow-origin=
