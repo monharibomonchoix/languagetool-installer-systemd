@@ -7,6 +7,8 @@ function _usage()
     echo "  --port=<port> : Change default port (default: 8081)"
     echo "  --allow-origin: Change default allow-origin (default *)"
     echo "                  To disable this option use --allow-origin="
+    echo "  --public      : Set server public"
+    echo "  --verbose     : Enable verbose log for server (not for this script)"
     echo "  --help -h     : Show this and exit"
 }
 
@@ -52,11 +54,14 @@ function install()
     echo "Unzip done"
     echo "Copying system files"
     rm -rf "$TEMP_DIR"
-    cp start.sh "$DEST_DIR"
-    chmod a+x "$DEST_DIR/start.sh"
+    cp -v start.sh "$DEST_DIR"
+    chmod -v a+x "$DEST_DIR/start.sh"
     cp languagetool.service "$SYSTEMD_FILE"
     systemctl daemon-reload
     echo "System files copied"
+    echo "Setup options files and folders"
+    mkdir -vp "/etc/languagetool/"
+    mkdir -vp "/var/lib/languagetool/"{ngrams,word2vec}
 }
 
 function set_params()
@@ -64,9 +69,17 @@ function set_params()
     echo "Creating params file"
     local PORT="$1"
     local ALLOW_ORIGIN="\"$(echo "$2" | sed 's/"/\\"/g')\""
+    local PUBLIC="$3"
+    local DEST_FILE="$5"
+    local VERBOSE="$4"
 
-    echo "PORT=$PORT" > "$3"
-    echo "ALLOW_ORIGIN=$ALLOW_ORIGIN" >> $3
+    echo "PORT=$PORT" > "$DEST_FILE"
+    echo "ALLOW_ORIGIN=$ALLOW_ORIGIN" >> "$DEST_FILE"
+    echo "PUBLIC=$PUBLIC" >>  "$DEST_FILE"
+    echo "VERBOSE=$VERBOSE" >>  "$DEST_FILE"
+
+    cp -v languagetool.conf.template /etc/languagetool/
+
     echo "Param file created"
 }
 
@@ -74,7 +87,10 @@ function main()
 {
     local PORT=8081
     local ALLOW_ORIGIN='"*"'
-    local PARAM_FILE="/opt/languagetool/params"
+    local PARAM_FILE="/etc/languagetool/params"
+    local PUBLIC=0
+    local VERBOSE=0
+
     if [[ -f "$PARAM_FILE" ]]
     then
         . /opt/languagetool/params
@@ -99,6 +115,12 @@ function main()
                 usage
                 exit 0
                 ;;
+            --public)
+                PUBLIC=1
+                ;;
+            --verbose)
+                VERBOSE=1
+                ;;
             *)
                 usage
                 exit 1
@@ -108,7 +130,7 @@ function main()
     done
 
     install
-    set_params "$PORT" "$ALLOW_ORIGIN" "$PARAM_FILE"
+    set_params "$PORT" "$ALLOW_ORIGIN" "$PUBLIC" "$VERBOSE" "$PARAM_FILE"
 }
 
 if [[ ($(id -u) -ne 0) ]]

@@ -15,5 +15,7 @@ Usage:  [--port=<port>] [--allow-origin=<origin>] [--help|-h]
   --port=<port> : Change default port (default: 8081)
   --allow-origin: Change default allow-origin (default *)
                   To disable this option use --allow-origin=
+  --public      : Set server public
+  --verbose     : Enable verbose log for server (not for this script)
   --help -h     : Show this and exit
 ```
