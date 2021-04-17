@@ -1,0 +1,12 @@
+[Unit]
+Description=Starts languagetool server
+
+[Service]
+Restart=no
+Type=simple
+User=nobody
+Group=nobody
+ExecStart=/opt/languagetool/start.sh
+
+[Install]
+WantedBy=multi-user.target 
