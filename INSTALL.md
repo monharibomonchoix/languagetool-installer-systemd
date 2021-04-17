@@ -44,7 +44,7 @@ Zip based installation:
 ```bash
 wget "https://github.com/monharibomonchoix/languagetool-installer-systemd/archive/refs/heads/master.zip" -O master.zip
 unzip master.zip
-cd languagetool-installer-systemd
+cd languagetool-installer-systemd-master
 sudo ./languagetool-installer-systemd.sh
 ```
 
